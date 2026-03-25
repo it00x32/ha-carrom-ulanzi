@@ -37,6 +37,7 @@ class AwtrixDisplay:
     def __init__(self, hass: HomeAssistant, prefix: str) -> None:
         self._hass = hass
         self._prefix = prefix
+        self._app_name = DEFAULT_APP_NAME
         self._last_game_id: str | None = None
         self._winner_notified = False
         self._last_round = 0
@@ -51,8 +52,8 @@ class AwtrixDisplay:
         if not data:
             return
 
-        app_name = self._opt(options, CONF_APP_NAME, DEFAULT_APP_NAME)
-        topic = f"{self._prefix}/custom/{app_name}"
+        self._app_name = self._opt(options, CONF_APP_NAME, DEFAULT_APP_NAME)
+        topic = f"{self._prefix}/custom/{self._app_name}"
 
         game_id = data.get("game_id")
         if game_id != self._last_game_id:
@@ -184,10 +185,9 @@ class AwtrixDisplay:
 
     async def async_remove(self) -> None:
         """Remove the custom app from Awtrix by sending empty payload."""
-        app_name = DEFAULT_APP_NAME
         try:
             await async_publish(
-                self._hass, f"{self._prefix}/custom/{app_name}", ""
+                self._hass, f"{self._prefix}/custom/{self._app_name}", ""
             )
         except Exception:
             _LOGGER.debug("Could not remove Awtrix app on unload")

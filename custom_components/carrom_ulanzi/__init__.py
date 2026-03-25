@@ -5,7 +5,7 @@ import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 
 from .const import (
     CONF_MQTT_PREFIX,
@@ -22,8 +22,6 @@ _LOGGER = logging.getLogger(__name__)
 
 PLATFORMS = [Platform.SENSOR]
 
-type CarromUlanziData = tuple[CarromUlanziCoordinator, AwtrixDisplay]
-
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Carrom Ulanzi Display from a config entry."""
@@ -36,10 +34,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     coordinator = CarromUlanziCoordinator(hass, url, scan_interval)
     display = AwtrixDisplay(hass, prefix)
 
-    async def _on_update() -> None:
+    @callback
+    def _on_update() -> None:
         """Push scores to Awtrix whenever coordinator refreshes."""
         if coordinator.data is not None:
-            await display.async_update(coordinator.data, opts)
+            hass.async_create_task(
+                display.async_update(coordinator.data, opts)
+            )
 
     coordinator.async_add_listener(_on_update)
 
