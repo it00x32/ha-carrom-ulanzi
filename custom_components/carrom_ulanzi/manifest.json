@@ -1,0 +1,12 @@
+{
+  "domain": "carrom_ulanzi",
+  "name": "Carrom Ulanzi Display",
+  "version": "1.0.0",
+  "documentation": "https://github.com/it00x32/ha-carrom-ulanzi",
+  "issue_tracker": "https://github.com/it00x32/ha-carrom-ulanzi/issues",
+  "codeowners": ["@it00x32"],
+  "requirements": [],
+  "dependencies": ["mqtt"],
+  "iot_class": "cloud_polling",
+  "config_flow": true
+}

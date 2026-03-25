@@ -1,0 +1,52 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Carrom Ulanzi Display einrichten",
+        "description": "Firebase-URL, MQTT-Prefix des Awtrix-Geräts und Abfrageintervall eingeben.",
+        "data": {
+          "url": "Firebase URL",
+          "mqtt_prefix": "Awtrix MQTT-Prefix",
+          "scan_interval": "Abfrageintervall (Sekunden)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zur Firebase-URL fehlgeschlagen.",
+      "invalid_data": "Die URL liefert keine gültigen Carrom-Daten."
+    },
+    "abort": {
+      "already_configured": "Diese Kombination (URL + Prefix) ist bereits eingerichtet."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Carrom Ulanzi Display — Einstellungen",
+        "data": {
+          "url": "Firebase URL",
+          "mqtt_prefix": "Awtrix MQTT-Prefix",
+          "app_name": "App-Name auf dem Display",
+          "scan_interval": "Abfrageintervall (Sekunden)",
+          "scroll_speed": "Scrollgeschwindigkeit (%)",
+          "duration": "Anzeigedauer (Sekunden)",
+          "text_color": "Textfarbe (Hex, z.B. FFFFFF)",
+          "leader_color": "Farbe Führender (Hex, z.B. 00FF00)",
+          "round_color": "Farbe Rundenanzeige (Hex, z.B. FFAA00)",
+          "rainbow": "Regenbogen-Modus",
+          "icon": "Icon-Name (leer = kein Icon)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "display_status": {
+        "name": "Display Status"
+      },
+      "last_update": {
+        "name": "Letztes Update"
+      }
+    }
+  }
+}
