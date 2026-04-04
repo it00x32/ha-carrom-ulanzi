@@ -34,7 +34,9 @@
           "leader_color": "Farbe Führender (Hex, z.B. 00FF00)",
           "round_color": "Farbe Rundenanzeige (Hex, z.B. FFAA00)",
           "rainbow": "Regenbogen-Modus",
-          "icon": "Icon-Name (leer = kein Icon)"
+          "icon": "Icon-Name (leer = kein Icon)",
+          "pause_text": "Text bei Spielpause (Ulanzi)",
+          "last_player_color": "Farbe letzter Spieler (wenigste Punkte, Hex)"
         }
       }
     }

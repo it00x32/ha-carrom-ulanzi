@@ -9,10 +9,12 @@ CONF_APP_NAME = "app_name"
 CONF_SCROLL_SPEED = "scroll_speed"
 CONF_TEXT_COLOR = "text_color"
 CONF_LEADER_COLOR = "leader_color"
+CONF_LAST_PLAYER_COLOR = "last_player_color"
 CONF_ROUND_COLOR = "round_color"
 CONF_RAINBOW = "rainbow"
 CONF_DURATION = "duration"
 CONF_ICON = "icon"
+CONF_PAUSE_TEXT = "pause_text"
 
 DEFAULT_URL = (
     "https://carrom-scorekeeper-default-rtdb.europe-west1.firebasedatabase.app"
@@ -24,10 +26,12 @@ DEFAULT_APP_NAME = "carrom"
 DEFAULT_SCROLL_SPEED = 100
 DEFAULT_TEXT_COLOR = "FFFFFF"
 DEFAULT_LEADER_COLOR = "00FF00"
+DEFAULT_LAST_PLAYER_COLOR = "888888"
 DEFAULT_ROUND_COLOR = "FFAA00"
 DEFAULT_RAINBOW = False
 DEFAULT_DURATION = 15
 DEFAULT_ICON = ""
+DEFAULT_PAUSE_TEXT = "Rauchpause"
 DEFAULT_LIFETIME = 120
 
 MIN_SCAN_INTERVAL = 5

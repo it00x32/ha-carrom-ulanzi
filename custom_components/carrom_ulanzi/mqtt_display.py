@@ -12,18 +12,22 @@ from .const import (
     CONF_APP_NAME,
     CONF_DURATION,
     CONF_ICON,
+    CONF_LAST_PLAYER_COLOR,
     CONF_LEADER_COLOR,
     CONF_RAINBOW,
     CONF_ROUND_COLOR,
     CONF_SCROLL_SPEED,
+    CONF_PAUSE_TEXT,
     CONF_TEXT_COLOR,
     DEFAULT_APP_NAME,
     DEFAULT_DURATION,
     DEFAULT_ICON,
+    DEFAULT_LAST_PLAYER_COLOR,
     DEFAULT_LEADER_COLOR,
     DEFAULT_LIFETIME,
     DEFAULT_RAINBOW,
     DEFAULT_ROUND_COLOR,
+    DEFAULT_PAUSE_TEXT,
     DEFAULT_SCROLL_SPEED,
     DEFAULT_TEXT_COLOR,
 )
@@ -63,7 +67,8 @@ class AwtrixDisplay:
 
         is_paused = data.get("is_paused", False)
         if is_paused:
-            await async_publish(self._hass, topic, "{}")
+            pause_payload = self._build_pause_payload(options)
+            await async_publish(self._hass, topic, json.dumps(pause_payload))
             return
 
         names = data.get("names", [])
@@ -75,6 +80,34 @@ class AwtrixDisplay:
         await async_publish(self._hass, topic, json.dumps(payload))
 
         await self._check_events(names, scores, rounds_played, target, options)
+
+    def _build_pause_payload(self, options: dict[str, Any]) -> dict[str, Any]:
+        """Show configurable text while the Carrom game is paused."""
+        scroll_speed = int(self._opt(options, CONF_SCROLL_SPEED, DEFAULT_SCROLL_SPEED))
+        duration = int(self._opt(options, CONF_DURATION, DEFAULT_DURATION))
+        round_color = self._opt(options, CONF_ROUND_COLOR, DEFAULT_ROUND_COLOR)
+        rainbow = self._opt(options, CONF_RAINBOW, DEFAULT_RAINBOW)
+        icon = self._opt(options, CONF_ICON, DEFAULT_ICON)
+        raw = self._opt(options, CONF_PAUSE_TEXT, DEFAULT_PAUSE_TEXT)
+        pause_text = (raw if isinstance(raw, str) else str(raw)).strip() or DEFAULT_PAUSE_TEXT
+
+        if rainbow:
+            payload: dict[str, Any] = {
+                "text": pause_text,
+                "rainbow": True,
+            }
+        else:
+            payload = {
+                "text": [{"t": pause_text, "c": round_color}],
+            }
+
+        payload["scrollSpeed"] = scroll_speed
+        payload["duration"] = duration
+        payload["lifetime"] = DEFAULT_LIFETIME
+        payload["pushIcon"] = 2
+        if icon:
+            payload["icon"] = icon
+        return payload
 
     def _build_payload(
         self,
@@ -126,16 +159,29 @@ class AwtrixDisplay:
     ) -> list[dict[str, str]]:
         text_color = self._opt(options, CONF_TEXT_COLOR, DEFAULT_TEXT_COLOR)
         leader_color = self._opt(options, CONF_LEADER_COLOR, DEFAULT_LEADER_COLOR)
+        last_player_color = self._opt(
+            options, CONF_LAST_PLAYER_COLOR, DEFAULT_LAST_PLAYER_COLOR
+        )
         round_color = self._opt(options, CONF_ROUND_COLOR, DEFAULT_ROUND_COLOR)
 
         max_score = max(scores) if scores else 0
+        min_score = min(scores) if scores else 0
         leader_idx = {i for i, s in enumerate(scores) if s == max_score}
+        if max_score != min_score:
+            trailer_idx = {i for i, s in enumerate(scores) if s == min_score}
+        else:
+            trailer_idx = set()
 
         fragments: list[dict[str, str]] = []
         for i, (name, score) in enumerate(zip(names, scores)):
             if i > 0:
                 fragments.append({"t": " | ", "c": text_color})
-            color = leader_color if i in leader_idx else text_color
+            if i in leader_idx:
+                color = leader_color
+            elif i in trailer_idx:
+                color = last_player_color
+            else:
+                color = text_color
             fragments.append({"t": f"{name}: {score}", "c": color})
 
         fragments.append({"t": f"  (Runde {rounds_played})", "c": round_color})

@@ -21,6 +21,8 @@ from .const import (
     CONF_APP_NAME,
     CONF_DURATION,
     CONF_ICON,
+    CONF_PAUSE_TEXT,
+    CONF_LAST_PLAYER_COLOR,
     CONF_LEADER_COLOR,
     CONF_MQTT_PREFIX,
     CONF_RAINBOW,
@@ -32,6 +34,8 @@ from .const import (
     DEFAULT_APP_NAME,
     DEFAULT_DURATION,
     DEFAULT_ICON,
+    DEFAULT_PAUSE_TEXT,
+    DEFAULT_LAST_PLAYER_COLOR,
     DEFAULT_LEADER_COLOR,
     DEFAULT_MQTT_PREFIX,
     DEFAULT_RAINBOW,
@@ -181,6 +185,12 @@ class CarromUlanziOptionsFlow(config_entries.OptionsFlow):
                     default=opts.get(CONF_LEADER_COLOR, DEFAULT_LEADER_COLOR),
                 ): TextSelector(),
                 vol.Required(
+                    CONF_LAST_PLAYER_COLOR,
+                    default=opts.get(
+                        CONF_LAST_PLAYER_COLOR, DEFAULT_LAST_PLAYER_COLOR
+                    ),
+                ): TextSelector(),
+                vol.Required(
                     CONF_ROUND_COLOR,
                     default=opts.get(CONF_ROUND_COLOR, DEFAULT_ROUND_COLOR),
                 ): TextSelector(),
@@ -190,6 +200,10 @@ class CarromUlanziOptionsFlow(config_entries.OptionsFlow):
                 ): BooleanSelector(),
                 vol.Optional(
                     CONF_ICON, default=opts.get(CONF_ICON, DEFAULT_ICON)
+                ): TextSelector(),
+                vol.Required(
+                    CONF_PAUSE_TEXT,
+                    default=opts.get(CONF_PAUSE_TEXT, DEFAULT_PAUSE_TEXT),
                 ): TextSelector(),
             }
         )

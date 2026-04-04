@@ -34,7 +34,9 @@
           "leader_color": "Leader color (hex, e.g. 00FF00)",
           "round_color": "Round info color (hex, e.g. FFAA00)",
           "rainbow": "Rainbow mode",
-          "icon": "Icon name (empty = no icon)"
+          "icon": "Icon name (empty = no icon)",
+          "pause_text": "Pause text on display",
+          "last_player_color": "Last-place player color (lowest score, hex)"
         }
       }
     }
